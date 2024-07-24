@@ -11,17 +11,17 @@ RSpec.describe Checkout do
 
   let(:green_tea_pricing_rule) do
     # Buy one get one free
-    PricingRule.new('GR1', ->(qty) { (qty / 2.0).ceil * 3.11 })
+    PricingRule.new('GR1', ->(qty, price) { (qty / 2.0).ceil * price })
   end
 
   let(:strawberry_pricing_rule) do
     # Bulk discount - buy 3 or more and price drops to 4.50
-    PricingRule.new('SR1', ->(qty) { qty >= 3 ? qty * 4.50 : qty * 5.00 })
+    PricingRule.new('SR1', ->(qty, _price) { qty >= 3 ? qty * 4.50 : qty * 5.00 })
   end
 
   let(:coffee_pricing_rule) do
     # Buy 3 and unit price drops to 2/3 of original price
-    PricingRule.new('CF1', ->(qty) { qty >= 3 ? qty * (11.23 * 2 / 3) : qty * 11.23 })
+    PricingRule.new('CF1', ->(qty, price) { qty >= 3 ? qty * (price * 2 / 3) : qty * price })
   end
 
   let(:pricing_rules) { [green_tea_pricing_rule, strawberry_pricing_rule, coffee_pricing_rule] }

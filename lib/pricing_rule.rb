@@ -18,13 +18,14 @@ class PricingRule
   #
   # @param product_code [String] The code of the product.
   # @param quantity [Integer] The quantity of the product.
+  # @param unit_price [Float] The unit price of the product.
   # @return [Float] The calculated price based on the pricing rule.
   # @raise [StandardError] If the given product code doesn't match the pricing_code.
   # @raise [StandardError] If the quantity is negative.
-  def apply(product_code, quantity)
+  def apply(product_code, quantity, unit_price)
     raise 'Invalid product' if product_code != @product_code
     raise 'Invalid quantity' if quantity < 1
 
-    @rule.call(quantity)
+    @rule.call(quantity, unit_price)
   end
 end

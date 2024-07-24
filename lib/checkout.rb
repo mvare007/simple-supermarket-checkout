@@ -61,7 +61,7 @@ class Checkout
     pricing_rule_for_product = pricing_rule_for_product(product_code)
 
     if pricing_rule_for_product
-      pricing_rule_for_product.apply(product_code, quantity)
+      pricing_rule_for_product.apply(product_code, quantity, unit_price)
     else
       quantity * unit_price
     end
