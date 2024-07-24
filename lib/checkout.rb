@@ -13,7 +13,10 @@ class Checkout
   # Adds a product to the basket.
   #
   # @param product [Product] The product to be added to the basket.
+  # @raise [ArgumentError] If the given product is not an instance of Product.
   def scan(product)
+    raise ArgumentError, 'Invalid product' unless product.is_a?(Product)
+
     @basket << product
   end
 

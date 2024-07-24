@@ -98,4 +98,12 @@ RSpec.describe Checkout do
       expect(subject.total).to eq(6.22)
     end
   end
+
+  describe 'scan' do
+    context 'when the given product is not an instance of Product' do
+      it 'raises an ArgumentError' do
+        expect { subject.scan('invalid') }.to raise_error(ArgumentError, 'Invalid product')
+      end
+    end
+  end
 end
