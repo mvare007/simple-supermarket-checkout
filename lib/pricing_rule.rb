@@ -23,7 +23,7 @@ class PricingRule
   # @raise [StandardError] If the quantity is negative.
   def apply(product_code, quantity)
     raise 'Invalid product' if product_code != @product_code
-    raise 'Invalid quantity' if quantity.negative?
+    raise 'Invalid quantity' if quantity < 1
 
     @rule.call(quantity)
   end
