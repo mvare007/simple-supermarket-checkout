@@ -86,7 +86,7 @@ RSpec.describe Checkout do
     end
   end
 
-  context 'when Basket: GR1,GR1 but there are no pricing_rules' do
+  context 'when Basket: GR1,GR1 but there are no pricing rules' do
     subject { described_class.new([]) }
 
     before do
