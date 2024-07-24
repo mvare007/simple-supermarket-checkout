@@ -79,4 +79,23 @@ RSpec.describe Checkout do
       expect(subject.total).to eq(30.57)
     end
   end
+
+  context 'when Basket is empty' do
+    it 'returns total price of 0' do
+      expect(subject.total).to be_zero
+    end
+  end
+
+  context 'when Basket: GR1,GR1 but there are no pricing_rules' do
+    subject { described_class.new([]) }
+
+    before do
+      subject.scan(green_tea)
+      subject.scan(green_tea)
+    end
+
+    it 'returns total price of 6.22' do
+      expect(subject.total).to eq(6.22)
+    end
+  end
 end
