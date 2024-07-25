@@ -3,11 +3,13 @@
 require 'checkout'
 require 'product'
 require 'pricing_rule'
+require 'bigdecimal'
+require 'debug'
 
 RSpec.describe Checkout do
-  let(:green_tea) { Product.new('GR1', 'Green Tea', 3.11) }
-  let(:strawberry) { Product.new('SR1', 'Strawberry', 5.00) }
-  let(:coffee) { Product.new('CF1', 'Coffee', 11.23) }
+  let(:green_tea) { Product.new('GR1', 'Green Tea', BigDecimal('3.11')) }
+  let(:strawberry) { Product.new('SR1', 'Strawberry', BigDecimal('5.00')) }
+  let(:coffee) { Product.new('CF1', 'Coffee', BigDecimal('11.23')) }
 
   let(:green_tea_pricing_rule) do
     # Buy one get one free
@@ -16,7 +18,7 @@ RSpec.describe Checkout do
 
   let(:strawberry_pricing_rule) do
     # Bulk discount - buy 3 or more and price drops to 4.50
-    PricingRule.new('SR1', ->(qty, _price) { qty >= 3 ? qty * 4.50 : qty * 5.00 })
+    PricingRule.new('SR1', ->(qty, _price) { qty >= 3 ? qty * BigDecimal('4.50') : qty * BigDecimal('5.00') })
   end
 
   let(:coffee_pricing_rule) do
@@ -38,7 +40,7 @@ RSpec.describe Checkout do
     end
 
     it 'returns total price of 22.45' do
-      expect(subject.total).to eq(22.45)
+      expect(subject.total).to eq(BigDecimal('22.45'))
     end
   end
 
@@ -49,7 +51,7 @@ RSpec.describe Checkout do
     end
 
     it 'returns total price of 3.11' do
-      expect(subject.total).to eq(3.11)
+      expect(subject.total).to eq(BigDecimal('3.11'))
     end
   end
 
@@ -62,7 +64,7 @@ RSpec.describe Checkout do
     end
 
     it 'returns total price of 16.61' do
-      expect(subject.total).to eq(16.61)
+      expect(subject.total).to eq(BigDecimal('16.61'))
     end
   end
 
@@ -76,7 +78,7 @@ RSpec.describe Checkout do
     end
 
     it 'returns total price of 30.57' do
-      expect(subject.total).to eq(30.57)
+      expect(subject.total).to eq(BigDecimal('30.57'))
     end
   end
 
@@ -95,7 +97,7 @@ RSpec.describe Checkout do
     end
 
     it 'returns total price of 6.22' do
-      expect(subject.total).to eq(6.22)
+      expect(subject.total).to eq(BigDecimal('6.22'))
     end
   end
 

@@ -2,6 +2,8 @@
 
 # Represents a checkout system that can scan products and calculate the total price of all products in the basket.
 class Checkout
+  PRECISION = 2 # The precision to be used when rounding the total price.
+
   # Initializes a new instance of the Checkout class.
   #
   # @param pricing_rules [Array<PricingRule>] An array of pricing rules to be applied during checkout.
@@ -26,18 +28,20 @@ class Checkout
   def total
     return 0 if @basket.empty?
 
-    basket_summary.sum do |product_summary|
+    total = basket_summary.sum do |product_summary|
       product_code = product_summary[:product_code]
       quantity = product_summary[:quantity]
       unit_price = product_summary[:price]
 
       calculate_subtotal(product_code, quantity, unit_price)
     end
+
+    BigDecimal(total.to_s).round(PRECISION)
   end
 
   private
 
-  # Returns an array of hashes with product code, total quantity present in basket, and unit price.
+  # Returns an array of hashes with product code, total quantity present in et, and unit price.
   #
   # @return [Array<Hash>] An array of hashes representing the summary of products in the basket.
   def basket_summary
@@ -54,7 +58,7 @@ class Checkout
     @pricing_rules.find { |pricing_rule| pricing_rule.product_code == product_code }
   end
 
-  # Calculates the subtotal for a given product based on it's pricing rule (if it's applicable) or unit price.
+  # Calculates the subtotal for a given product based on it's pr'icing rule (if it' it'ss applicable) or unit price.
   #
   # @param product_code [String] The product code for which to calculate the subtotal.
   # @param quantity [Integer] The quantity of the product in the basket.

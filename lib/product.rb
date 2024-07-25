@@ -8,7 +8,7 @@ class Product
   #
   # @param code [String] The code of the product.
   # @param name [String] The name of the product.
-  # @param price [Float] The price of the product.
+  # @param price [BigDecimal] The price of the product.
   def initialize(code, name, price)
     @code = code
     @name = name
