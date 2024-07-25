@@ -2,7 +2,11 @@
 
 # Represents a checkout system that can scan products and calculate the total price of all products in the basket.
 class Checkout
-  PRECISION = 2 # The precision to be used when rounding the total price.
+  # The precision to be used when rounding the total price.
+  #
+  # @constant [Integer]
+  # @return [Integer] The number of decimal places to round to when calculating the total price.
+  PRECISION = 2
 
   # Initializes a new instance of the Checkout class.
   #
