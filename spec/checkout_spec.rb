@@ -184,18 +184,6 @@ RSpec.describe Checkout do
   end
 
   describe 'calculate_subtotal' do
-    context 'when the pricing rule for the given product code is found' do
-      it 'calculates the subtotal based on the pricing rule' do
-        expect(subject.send(:calculate_subtotal, 'GR1', 2, BigDecimal('3.11'))).to eq(BigDecimal('3.11'))
-      end
-    end
-
-    context 'when the pricing rule for the given product code is not found' do
-      it 'calculates the subtotal based on the unit price' do
-        expect(subject.send(:calculate_subtotal, 'invalid', 2, BigDecimal('3.11'))).to eq(BigDecimal('6.22'))
-      end
-    end
-
     context 'with pricing rule' do
       it 'calculates the subtotal based on the pricing rule' do
         expect(subject.send(:calculate_subtotal, 'SR1', 3, BigDecimal('5.00'))).to eq(BigDecimal('13.50'))
