@@ -106,6 +106,107 @@ RSpec.describe Checkout do
       it 'raises an ArgumentError' do
         expect { subject.scan('invalid') }.to raise_error(ArgumentError, 'Invalid product')
       end
+
+      it 'adds the product to the basket' do
+        expect { subject.scan(green_tea) }.to change { subject.instance_variable_get(:@basket).size }.by(1)
+      end
+    end
+  end
+
+  describe 'total' do
+    context 'when the basket is empty' do
+      it 'returns 0' do
+        expect(subject.total).to be_zero
+      end
+    end
+
+    context 'when the basket is not empty' do
+      before do
+        subject.scan(green_tea)
+        subject.scan(strawberry)
+      end
+
+      it 'returns the total price of all products in the basket' do
+        expect(subject.total).to eq(BigDecimal('8.11'))
+      end
+    end
+
+    context 'when the basket contains multiple products' do
+      before do
+        subject.scan(green_tea)
+        subject.scan(strawberry)
+        subject.scan(coffee)
+      end
+
+      it 'returns the total price of all products in the basket' do
+        expect(subject.total).to eq(BigDecimal('19.34'))
+      end
+    end
+  end
+
+  describe 'basket_summary' do
+    context 'when the basket is empty' do
+      it 'returns an empty array' do
+        expect(subject.send(:basket_summary)).to eq([])
+      end
+    end
+
+    context 'when the basket is not empty' do
+      before do
+        subject.scan(green_tea)
+        subject.scan(strawberry)
+        subject.scan(green_tea)
+      end
+
+      it 'returns an array of hashes with product code, total quantity present in the basket, and unit price' do
+        expect(subject.send(:basket_summary)).to eq(
+          [
+            { product_code: 'GR1', quantity: 2, price: BigDecimal('3.11') },
+            { product_code: 'SR1', quantity: 1, price: BigDecimal('5.00') }
+          ]
+        )
+      end
+    end
+  end
+
+  describe 'pricing_rule_for_product' do
+    context 'when the pricing rule for the given product code is found' do
+      it 'returns the pricing rule object' do
+        expect(subject.send(:pricing_rule_for_product, 'GR1')).to eq(green_tea_pricing_rule)
+      end
+    end
+
+    context 'when the pricing rule for the given product code is not found' do
+      it 'returns nil' do
+        expect(subject.send(:pricing_rule_for_product, 'invalid')).to be_nil
+      end
+    end
+  end
+
+  describe 'calculate_subtotal' do
+    context 'when the pricing rule for the given product code is found' do
+      it 'calculates the subtotal based on the pricing rule' do
+        expect(subject.send(:calculate_subtotal, 'GR1', 2, BigDecimal('3.11'))).to eq(BigDecimal('3.11'))
+      end
+    end
+
+    context 'when the pricing rule for the given product code is not found' do
+      it 'calculates the subtotal based on the unit price' do
+        expect(subject.send(:calculate_subtotal, 'invalid', 2, BigDecimal('3.11'))).to eq(BigDecimal('6.22'))
+      end
+    end
+
+    context 'with pricing rule' do
+      it 'calculates the subtotal based on the pricing rule' do
+        expect(subject.send(:calculate_subtotal, 'SR1', 3, BigDecimal('5.00'))).to eq(BigDecimal('13.50'))
+      end
+    end
+
+    context 'with no pricing rule' do
+      subject { described_class.new([]) }
+      it 'calculates the subtotal based on the unit price' do
+        expect(subject.send(:calculate_subtotal, 'SR1', 2, BigDecimal('5.00'))).to eq(BigDecimal('10.00'))
+      end
     end
   end
 end
