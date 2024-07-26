@@ -66,8 +66,8 @@ class Checkout
   #
   # @param product_code [String] The product code for which to calculate the subtotal.
   # @param quantity [Integer] The quantity of the product in the basket.
-  # @param unit_price [Float] The unit price of the product.
-  # @return [Float] The subtotal for the given product.
+  # @param unit_price [BigDecimal] The unit price of the product.
+  # @return [BigDecimal] The subtotal for the given product.
   def calculate_subtotal(product_code, quantity, unit_price)
     pricing_rule_for_product = pricing_rule_for_product(product_code)
 
