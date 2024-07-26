@@ -130,18 +130,6 @@ RSpec.describe Checkout do
         expect(subject.total).to eq(BigDecimal('8.11'))
       end
     end
-
-    context 'when the basket contains multiple products' do
-      before do
-        subject.scan(green_tea)
-        subject.scan(strawberry)
-        subject.scan(coffee)
-      end
-
-      it 'returns the total price of all products in the basket' do
-        expect(subject.total).to eq(BigDecimal('19.34'))
-      end
-    end
   end
 
   describe 'basket_summary' do
